@@ -22,7 +22,7 @@ const fetchRecovery = async () => {
 }
 
 const close = () => {
-  finalData.value = { message: '', code: '' }
+  finalData.value = { message: '', code: '' , dietCreator:"" }
   model.recoveryCode = ''
   dialog.value = false
 }
