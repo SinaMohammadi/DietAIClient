@@ -8,7 +8,7 @@ const loading = ref(false)
 const finalData = ref({ message: '', code: '', dietCreator: '' })
 const fetchRecovery = async () => {
   loading.value = true
-  const data = await fetch(`http://localhost:8080/api/v1/dalle/${model.recoveryCode}`, {
+  const data = await fetch(`https://dietserver.iran.liara.run/api/v1/dalle/${model.recoveryCode}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'

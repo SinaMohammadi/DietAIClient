@@ -32,7 +32,6 @@ provide('modal', action)
 .header {
   width: 100vw;
   height: 80px;
-  position: fixed;
   background-color: #f1f0e8;
   padding: 0 28px 0 28px;
 }

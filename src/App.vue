@@ -17,7 +17,6 @@ import SneakBar from './components/SneakBar.vue';
 
 <style scoped>
 main {
-  padding-top: 120px;
   padding-left: 28px;
   padding-right: 28px;
 }

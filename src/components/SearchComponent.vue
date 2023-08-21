@@ -3,26 +3,18 @@ import { reactive, ref } from 'vue'
 import { useToaster } from '../stores/counter'
 import type { Ref } from 'vue'
 import { dietPostModel } from '../models/post'
-import ResultCard from './ResultCard.vue';
+import ResultCard from './ResultCard.vue'
 const { notify } = useToaster()
 const valid: Ref<boolean> = ref(false)
 const loading: Ref<boolean> = ref(false)
 const sexs: string[] = ['مرد', 'زن']
 const actions: string[] = ['افزایش وزن', 'کاهش وزن']
-const model: dietPostModel = reactive({
-  height: 0,
-  weight: 0,
-  description: '',
-  name: '',
-  sex: '',
-  age: 0,
-  action: ''
-})
+const model: dietPostModel = reactive({})
 const finalData = ref({ message: '', code: '' })
 const search: () => Promise<void> = async () => {
   loading.value = true
   try {
-    const data: Response = await fetch('http://localhost:8080/api/v1/dalle', {
+    const data: Response = await fetch('https://dietserver.iran.liara.run/api/v1/dalle', {
       method: 'POST',
       body: JSON.stringify(model),
       headers: {
@@ -101,7 +93,7 @@ const search: () => Promise<void> = async () => {
       </v-row>
     </v-container>
   </v-form>
-<ResultCard  :model="model" :loading="loading" :finalData="finalData"/>
+  <ResultCard :model="model" :loading="loading" :finalData="finalData" />
 </template>
 
 <style scoped>
