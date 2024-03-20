@@ -2,53 +2,52 @@
 import { reactive, ref } from 'vue'
 import { useToaster } from '../stores/counter'
 import type { Ref } from 'vue'
-import { dietPostModel } from '../models/post'
+import { DIetPostModel } from '../models/post'
 import ResultCard from './ResultCard.vue'
+import { axiosService } from '@/utils/service'
+import { socket } from '@/utils/socket'
+
 const { notify } = useToaster()
 const valid: Ref<boolean> = ref(false)
 const loading: Ref<boolean> = ref(false)
 const sexs: string[] = ['مرد', 'زن']
 const actions: string[] = ['افزایش وزن', 'کاهش وزن']
-const model: dietPostModel = reactive({})
+const model: DIetPostModel = reactive(new DIetPostModel())
 const finalData = ref({ message: '', code: '' })
+const data = ref('')
+socket.on('chatgptResChunk', (data: any) => {
+  if (data?.content && data.uniqId == model.uniqId) {
+    finalData.value.message = data?.content
+    loading.value = false
+  }
+})
 const search: () => Promise<void> = async () => {
   loading.value = true
   try {
-    const data: Response = await fetch('https://dietserver.iran.liara.run/api/v1/dalle', {
-      method: 'POST',
-      body: JSON.stringify(model),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    const data = await axiosService.createData('dalle', model)
     loading.value = false
-    const parsedValue = await data.json()
-    if (data.status != 200) {
-      notify(parsedValue.message, 'red', 4000)
-      return
-    }
-    finalData.value = parsedValue
-  } catch (err: any) {
+    finalData.value = data
+  } catch (error: any) {
     loading.value = false
-    notify(err.message, 'red', 3000)
+    notify(error.message, 'red', 3000)
   }
 }
 </script>
 
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="valid" fast-fail @submit.prevent="search">
     <v-container class="">
       <v-spacer class="spacer" />
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field v-model="model.name" label="نام و نام خانوادگی" required></v-text-field>
+          <v-text-field v-model="model.name" :label="$t('name')" required></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
           <v-select
             v-model="model.sex"
             :items="sexs"
-            :rules="[(v) => !!v || 'برای دریافت بهتر اطلاعات بهتر است این قسمت را انتخاب کنید']"
-            label="جنسیت"
+            :rules="[(v) => !!v || $t('input_rules')]"
+            :label="$t('sex')"
             required
           ></v-select>
         </v-col>
@@ -56,28 +55,38 @@ const search: () => Promise<void> = async () => {
           <v-select
             v-model="model.action"
             :items="actions"
-            :rules="[(v) => !!v || 'برای دریافت بهتر اطلاعات بهتر است این قسمت را انتخاب کنید']"
-            label="هدف"
+            :rules="[(v) => !!v || $t('input_rules')]"
+            :label="$t('goal')"
             required
           ></v-select>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field v-model="model.height" :counter="3" label="قد" required></v-text-field>
+          <v-text-field
+            v-model="model.height"
+            :counter="3"
+            :label="$t('height')"
+            required
+          ></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
-          <v-text-field v-model="model.weight" :counter="3" label="ورن" required></v-text-field>
+          <v-text-field
+            v-model="model.weight"
+            :counter="3"
+            :label="$t('weight')"
+            required
+          ></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
-          <v-text-field v-model="model.age" :counter="3" label="سن" required></v-text-field>
+          <v-text-field v-model="model.age" :counter="3" :label="$t('age')" required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12">
           <v-textarea
             counter
-            label="توضیحات"
+            :label="$t('description')"
             v-model="model.description"
             rows="2"
             row-height="20"
@@ -86,13 +95,24 @@ const search: () => Promise<void> = async () => {
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-btn variant="outlined" class="pointer" color="#252B48" @click="search" v-if="!loading">
-            برنامه برام بساز کن !!
+          <v-btn
+            variant="outlined"
+            class="pointer"
+            color="#252B48"
+            type="submit"
+            v-if="!loading"
+            :disabled="!valid"
+          >
+            {{ $t('searchBtn') }}
           </v-btn>
         </v-col>
       </v-row>
+      <div>
+        {{ data }}
+      </div>
     </v-container>
   </v-form>
+
   <ResultCard :model="model" :loading="loading" :finalData="finalData" />
 </template>
 

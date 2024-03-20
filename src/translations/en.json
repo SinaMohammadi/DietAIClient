@@ -1,0 +1,26 @@
+{
+  "appTitle": "Mushahed",
+  "searchBtn": "Build Your Programm",
+  "height": "Height",
+  "name": "Full Name",
+  "age": "Age",
+  "description": "Description",
+  "goal": "Goal",
+  "program": "Your Program",
+  "sex": "Sex",
+
+  "weight": "Weight",
+  "exit": "exit",
+  "d": "['man', 'women']",
+  "input_rules": "To get better information, it is better to select this section",
+
+  "tracking_title": "Food program tracking code",
+  "tracking_main": "With this code, you can always find your program :)",
+
+  "recovery_title": "Program recovery",
+  "recovery_label": "Program Code",
+  "recovery_rules1": "Entering the code is required",
+  "recovery_rules2": "The code must be 10 characters",
+  "recovery_result": "I found it with this code",
+  "recovery_placeholder": "Give me the code of your program :)"
+}

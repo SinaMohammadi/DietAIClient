@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import MainHeader from '@/components/MainHeader.vue'
+import MainHeader from './components/MainHeader.vue'
 import SearchComponent from './components/SearchComponent.vue'
-import SneakBar from './components/SneakBar.vue';
+import SneakBar from './components/SneakBar.vue'
 </script>
 
 <template>
-  <v-locale-provider rtl>
-    <SneakBar/>
+  <v-app>
+    <SneakBar />
     <MainHeader />
     <main>
       <SearchComponent />
     </main>
-  </v-locale-provider>
-  <RouterView />
+    <RouterView />
+  </v-app>
 </template>
 
 <style scoped>

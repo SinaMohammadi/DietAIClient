@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import i18n, { defaultLocale } from '../i18n'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -6,18 +7,31 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      redirect: `/${defaultLocale}`
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
+    {
+      path: '/:locale',
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: HomeView
+        }
+      ]
+    }
   ]
+})
+
+router.beforeEach(async (to, from) => {
+  const newLocale = to.params.locale
+  const prevLocale = from.params.locale
+
+  if (newLocale === prevLocale) {
+    return
+  }
+
+  await i18n.loadMessagesFor(newLocale)
+  i18n.setLocale(newLocale)
 })
 
 export default router

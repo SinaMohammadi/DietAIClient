@@ -13,8 +13,8 @@ const model = computed(() => data.model)
       closable
       color="success"
       icon="$success"
-      :title="' کد رهگیری برنامه غذایی  ' + finalData.code"
-      text="با این کد میتوانی همیشه برنامه خودتوو پیدا  کنی :)"
+      :title="$t('tracking_title') + finalData.code"
+      :text="$t('tracking_main')"
       v-if="finalData.code != '' && finalData.code"
       type="info"
     ></v-alert>
@@ -23,7 +23,7 @@ const model = computed(() => data.model)
       variant="tonal"
       v-if="loading || finalData.message != ''"
       :loading="loading"
-      :title="'برنامه ' + model.name"
+      :title="$t('program') +' ' + model.name"
     >
       <v-card-actions>
         <v-row>

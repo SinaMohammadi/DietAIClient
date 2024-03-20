@@ -8,7 +8,7 @@ const loading = ref(false)
 const finalData = ref({ message: '', code: '', dietCreator: '' })
 const fetchRecovery = async () => {
   loading.value = true
-  const data = await fetch(`https://dietserver.iran.liara.run/api/v1/dalle/${model.recoveryCode}`, {
+  const data = await fetch(`/api/v1/dalle/${model.recoveryCode}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ const fetchRecovery = async () => {
 }
 
 const close = () => {
-  finalData.value = { message: '', code: '' , dietCreator:"" }
+  finalData.value = { message: '', code: '', dietCreator: '' }
   model.recoveryCode = ''
   dialog.value = false
 }
@@ -33,7 +33,7 @@ const close = () => {
     <v-dialog v-model="dialog" persistent width="1024">
       <v-card>
         <v-card-title>
-          <span class="text-h5">باز یابی برنامه</span>
+          <span class="text-h5">{{ $t('recovery_title') }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -41,16 +41,16 @@ const close = () => {
               <v-col cols="12">
                 <v-text-field
                   v-model="model.recoveryCode"
-                  label="کد برنامه "
-                  placeholder="کد برنامه تو بهم بده :)"
+                  :label="$t('recovery_label')"
+                  :placeholder="$t('recovery_placeholder')"
                   required
                   clear-icon="mdi-close-circle"
                   clearable
                   :rules="[
-                    () => !!model.recoveryCode || 'وارد کردن کد اجباری میباشد',
+                    () => !!model.recoveryCode || $t('recovery_rules1'),
                     () =>
                       (!!model.recoveryCode && model.recoveryCode.length == 10) ||
-                      'کد باید 10 کارکتر باشد'
+                      $t('recovery_rules2')
                   ]"
                   @click:append="fetchRecovery"
                   append-icon="mdi-card-search"
@@ -64,7 +64,7 @@ const close = () => {
               closable
               color="success"
               icon="$success"
-              :title="'بیا با این کد اینو پیدا کردم ' + finalData.code"
+              :title="$t('recovery_result') + finalData.code"
               v-if="finalData.code != '' && finalData.code"
               type="info"
             ></v-alert>
@@ -74,7 +74,7 @@ const close = () => {
                 <v-card
                   :loading="loading"
                   v-if="loading || finalData.message != ''"
-                  :title="'برنامه ' + finalData.dietCreator"
+                  :title="$t('program') + finalData.dietCreator"
                 >
                   <v-card-actions>
                     <v-row>
@@ -88,7 +88,7 @@ const close = () => {
         </v-card-text>
         <v-card-actions>
           <v-spacer class="spacer" />
-          <v-btn color="red-darken-1" variant="text" @click="close()"> خروج </v-btn>
+          <v-btn color="red-darken-1" variant="text" @click="close()"> {{ $t('exit') }} </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

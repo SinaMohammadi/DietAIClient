@@ -7,19 +7,23 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   server: {
     proxy: {
-      "/api/": {
-        target: "https://dietserver.iran.liara.run",
+      '/api/': {
+        target: 'https://dietserver.mehdimohammadi.info/',
         secure: false,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/api/')
       },
+      '/socket.io/': {
+        target: 'https://dietserver.mehdimohammadi.info/',
+        changeOrigin: true,
+        ws: true
+      }
     },
+    cors: false
   },
-  plugins: [
-    vue(),
-  ],
+  plugins: [vue()],
   resolve: {
-    alias: {
+    alias: { 
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }

@@ -2,6 +2,7 @@
 import HeaderLogo from '@/components/Icons/HeaderLogo.vue'
 import RecoverModal from './RecoverModal.vue'
 import { ref, provide } from 'vue'
+import LocaleSwitcher from './l10n/LocaleSwitcher.vue'
 const action = ref(false)
 provide('modal', action)
 </script>
@@ -12,13 +13,16 @@ provide('modal', action)
         <HeaderLogo class="logo" />
       </div>
       <div>
+        <LocaleSwitcher />
+      </div>
+      <div>
         <v-btn
           variant="outlined"
           color="#252B48"
           class="fb-btn grey--text"
           @click="action = !action"
         >
-          بازیابی برنامه
+          {{ $t('recovery_title') }}
         </v-btn>
       </div>
     </nav>

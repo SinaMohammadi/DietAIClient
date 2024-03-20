@@ -1,0 +1,6 @@
+export * from './FooterComponent.vue'
+export * from './MainHeader.vue'
+export * from './RecoverModal.vue'
+export * from './ResultCard.vue'
+export * from './SearchComponent.vue'
+export * from './SneakBar.vue'
